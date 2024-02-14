@@ -26,9 +26,6 @@ jobs:
       - run:
           command: npm run build
           name: Build app
-      - run:
-          command: npm run build-storybook
-          name: Build Storybook
   e2e:
     executor: pw-jammy-development
     steps:
@@ -43,8 +40,12 @@ jobs:
   deploy:
     executor: node/default
     steps:
+      - npm-install
       - run:
-          command: echo "Deploy placeholder"
+          command: npm run netlify build
+          name: Build for Netlify
+      - run:
+          command: npm run netlify deploy -- --prod --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID
           name: Deploy on Netlify
 
 workflows:
